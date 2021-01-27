@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>freemarkTest</groupId>
+    <artifactId>freemarkTest</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.source.version>1.7</java.source.version>
+        <java.target.version>1.7</java.target.version>
+        <buildDirectory>target</buildDirectory>
+        <plugin.checkstyle.version>2.10</plugin.checkstyle.version>
+        <plugin.maven-compiler.version>3.3</plugin.maven-compiler.version>
+        <plugin.maven-surefire.version>2.18.1</plugin.maven-surefire.version>
+        <spring.version>4.2.2.RELEASE</spring.version>
+        <aspectj.version>1.6.8</aspectj.version>
+        <cglib.version>2.2.2</cglib.version>
+        <mybatis.version>3.3.0</mybatis.version>
+        <mybatis.spring.version>1.2.2</mybatis.spring.version>
+        <tomcat-jdbc.version>7.0.57</tomcat-jdbc.version>
+        <jedis.version>2.7.2</jedis.version>
+        <mysql.driver.version>5.1.18</mysql.driver.version>
+        <jackson.version>2.2.3</jackson.version>
+        <fastjson.version>1.2.7</fastjson.version>
+        <netty-version>4.0.0.Alpha8</netty-version>
+        <rocketmq.version>3.2.6</rocketmq.version>
+        <jboss.logging.version>3.3.0.Final</jboss.logging.version>
+        <jboss.logging.tools.version>2.0.1.Final</jboss.logging.tools.version>
+        <log4j.version>1.2.16</log4j.version>
+        <org.slf4j.version>1.6.1</org.slf4j.version>
+        <ch.qos.logback>1.0.13</ch.qos.logback>
+        <derby.version>10.9.1.0</derby.version>
+        <servlet.version>3.1.0</servlet.version>
+        <junit.version>4.11</junit.version>
+        <mockito.version>1.9.5</mockito.version>
+        <commons.fileupload.version>1.3.1</commons.fileupload.version>
+        <org.apache.poi.version>3.9</org.apache.poi.version>
+        <commons-beanutils.version>1.9.2</commons-beanutils.version>
+        <org.apache.commons.version>3.4</org.apache.commons.version>
+        <jetty.version>9.2.10.v20150310</jetty.version>
+    </properties>
+
+
+    <profiles>
+        <!--单元测试profile配置 -->
+        <profile>
+            <id>unittest</id>
+            <properties>
+                <env>unittest</env>
+            </properties>
+        </profile>
+        <!-- 开发环境，默认激活 -->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <env>dev</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault><!--默认启用的是dev环境配置 -->
+            </activation>
+        </profile>
+        <!-- 测试环境 -->
+        <profile>
+            <id>test</id>
+            <properties>
+                <env>test</env>
+            </properties>
+        </profile>
+        <!-- 生产环境 -->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
+            </properties>
+        </profile>
+        <!--灰度环境-->
+        <profile>
+            <id>preprod</id>
+            <properties>
+                <env>preprod</env>
+            </properties>
+        </profile>
+    </profiles>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!--Spring End --   >
+
+        <!-- AspectJ -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+
+        <!-- CGLIB Bytecode provider -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>${cglib.version}</version>
+        </dependency>
+
+        <!--fast json -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+        <!-- Apache Derby 轻量级数据库  -->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${derby.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>${tomcat-jdbc.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- orm -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.38</version>
+        </dependency>
+        <!-- 数据库连接池 -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+
+        <!-- validator -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.1.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.2.2.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+
+        <!-- Netty Begin -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport</artifactId>
+            <version>${netty-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-handler</artifactId>
+            <version>${netty-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http</artifactId>
+            <version>${netty-version}</version>
+        </dependency>
+        <!-- Netty END -->
+
+
+
+        <!-- apache poi begin -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${org.apache.poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${org.apache.poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>${org.apache.poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>${commons-beanutils.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- apache poi end -->
+
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <!--oms security end-->
+
+        <!-- utils -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.6</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${org.apache.commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-io</artifactId>
+                    <groupId>commons-io</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-jaxrs</artifactId>
+            <version>1.9.13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.5.4</version>
+        </dependency>
+
+
+
+        <!--mybatis pagination -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <!-- cat -->
+        <dependency>
+            <groupId>com.dianping.cat</groupId>
+            <artifactId>cat-client</artifactId>
+            <version>1.3.6</version>
+        </dependency>
+        <!--view-->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.23</version>
+        </dependency>
+        <!--http client-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.6</version>
+        </dependency>
+        <!--google guava-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+
+        <!--dubbo begin -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.5.3</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- dubbo end -->
+
+
+        <!-- 日志 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.logback-extensions</groupId>
+            <artifactId>logback-ext-spring</artifactId>
+            <version>0.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>2.7.8</version>
+        </dependency>
+
+        <!--RocketMQ Begin -->
+        <dependency>
+            <groupId>com.alibaba.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+            <version>${rocketmq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.rocketmq</groupId>
+            <artifactId>rocketmq-remoting</artifactId>
+            <version>${rocketmq.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.rocketmq</groupId>
+            <artifactId>rocketmq-broker</artifactId>
+            <version>${rocketmq.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.rocketmq</groupId>
+            <artifactId>rocketmq-common</artifactId>
+            <version>${rocketmq.version}</version>
+        </dependency>
+        <!--RocketMQ End -->
+
+    </dependencies>
+
+
+
+    <build>
+        <filters>
+            <filter>src/main/filters/application.${env}.properties</filter>
+        </filters>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+
+        <directory>${buildDirectory}</directory>
+        <finalName>freemarkTest</finalName>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${plugin.maven-compiler.version}</version>
+                    <configuration>
+                        <source>${java.source.version}</source>
+                        <target>${java.target.version}</target>
+                        <encoding>UTF-8</encoding>
+                        <excludes>
+                            <exclude>**/package-info.java</exclude>
+                        </excludes>
+                        <compilerArgument>-AtranslationFilesPath=${project.basedir}/target/generated-translation-files</compilerArgument>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${plugin.checkstyle.version}</version>
+
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                        <consoleOutput>true</consoleOutput>
+                        <failsOnError>true</failsOnError>
+                        <violationSeverity>error</violationSeverity>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>check-style</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>checkstyle</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.mybatis.generator</groupId>
+                    <artifactId>mybatis-generator-maven-plugin</artifactId>
+                    <version>1.3.2</version>
+                    <configuration>
+                        <verbose>false</verbose>
+                        <overwrite>true</overwrite>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>${jetty.version}</version>
+                    <configuration>
+                        <webApp>
+                            <contextPath>/</contextPath>
+                        </webApp>
+                        <httpConnector>
+                            <port>9999</port>
+                            <idleTimeout>60000</idleTimeout>
+                        </httpConnector>
+                        <scanIntervalSeconds>0</scanIntervalSeconds>
+                        <stopKey/>
+                        <stopPort/>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+    </build>
+
+
+
+
+</project>

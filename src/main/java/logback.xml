@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 根节点，设置为调试模式 自动重扫描配置文件 间隔为30秒 -->
+<configuration debug="false" scan="true" scanPeriod="30 seconds">
+
+    <!-- 定义常量 ，下面可以引用  -->
+    <property name="LOG_HOME" value="LOG" /><!-- log目录 -->
+    <property name="BACKUP_HOME" value="${LOG_HOME}/backup" /><!-- 日志备份目录 -->
+
+    <!-- 定义控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 定义过滤器 相比logger内定义优先级高   -->
+        <!--				<filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+        <!--					<level>warn</level>-->
+        <!--				</filter>-->
+        <!-- 定义日志格式 -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %date{yyyy-MM-dd HH:mm:ss} %level [%thread] %10logger[%file:%line] - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+    <!-- 定义指定文件名称的输出   此处设定的文件名称是动态设置的  即  每天生成一个文件  用于记录当天的文件信息 -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_HOME}/current_file_log.log</file>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %date{yyyy-MM-dd HH:mm:ss} %level [%thread] %10logger[%file:%line] - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+    <!-- 每日滚动并压缩 -->
+    <appender name="DAILY_LOG"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/time_base_rolling.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>
+                ${BACKUP_HOME}/%d{yyyy-MM-dd-HH-mm}/time_base_rolling.%d{yyyyMMdd_HHmm}.log.zip
+            </FileNamePattern>
+            <MaxHistory>3</MaxHistory>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+    <!-- 按大小切分并压缩日志 ，下标跨度不要太大，下标达到最大后会删掉最大下标对应的文件然后依次往后重命名，之后创建新的size_base_rolling.log -->
+    <appender name="SIZE_BASE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 下面这段注释的代码可以在日志文件超过 XMB 时进行归档，并且归档文件后缀只要是 .zip 或 .gz 就会自动压缩日志归档 -->
+        <file>${LOG_HOME}/size_base_rolling.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>
+                ${BACKUP_HOME}/size_base_rolling.%i.log.zip
+            </fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>5</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>1MB</maxFileSize>
+        </triggeringPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+    <!-- 单独对指定的日志设定级别，使该日志对象输出地日志级别限定在：“INFO”级别，不受跟级别的限制   目标可以是类或者包-->
+    <!--	<logger name="com.ztgame.logback.test" level="info">-->
+    <!--		<appender-ref ref="SIZE_BASE" />-->
+    <!--	</logger>-->
+
+    <root level="info">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="DAILY_LOG" />
+        <appender-ref ref="SIZE_BASE" />
+    </root>
+</configuration>

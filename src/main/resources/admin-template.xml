@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--framework config-->
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+    <bean id="freemarkerConfigurer"
+          class="com.test.util.SearchFreeMarkerConfigurer">
+        <constructor-arg value="true"/>
+        <property name="templateLoaderPath" value="/WEB-INF/template/"/>
+        <property name="preTemplatePath" value="/data/template/"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">0</prop>
+                <prop key="default_encoding">UTF-8</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="number_format">#.##</prop>
+                <prop key="classic_compatible">true</prop>
+                <prop key="template_exception_handler">ignore</prop>
+                <prop key="object_wrapper">freemarker.ext.beans.BeansWrapper</prop>
+            </props>
+        </property>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="objectMapper" value-ref="objectMapper"/>
+                <entry key="base" value=""/>
+            </map>
+        </property>
+    </bean>
+    <bean id="freeMarkerViewResolver"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="cache" value="true"/>
+        <property name="suffix" value=".ftl"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="requestContextAttribute" value="request"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="order" value="0"/>
+    </bean>
+</beans>

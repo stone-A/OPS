@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoder 默认配置为PatternLayoutEncoder -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- logback为java中的包 -->
+    <logger name="com.test.test"/>
+    <!--logback.LogbackDemo：类的全路径 -->
+    <logger name="com.test.test.LogbackDemo" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <appender name="file"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Encoding>UTF-8</Encoding>
+        <File>/home/test.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>/home/test-%d{yyyy-MM-dd}.log
+            </FileNamePattern>
+            <MaxHistory>10</MaxHistory>
+            <TimeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>5MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>[%-5level] %d{HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+    <root>
+        <!-- 定义了ERROR和INFO级别的日志，分别在FILE文件和控制台输出 -->
+        <level value="error" />
+        <level value="info" />
+        <appender-ref ref="file" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+
+</configuration>
+
+
+<!--<configuration>-->
+    <!--<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">-->
+        <!--&lt;!&ndash; encoder 默认配置为PatternLayoutEncoder &ndash;&gt;-->
+        <!--<encoder>-->
+            <!--<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+
+    <!--&lt;!&ndash; logback为java中的包 &ndash;&gt;-->
+    <!--<logger name="com.test.controller"/>-->
+    <!--&lt;!&ndash;logback.LogbackDemo：类的全路径 &ndash;&gt;-->
+    <!--<logger name="com.test.controller.PageController" level="INFO" additivity="false">-->
+        <!--<appender-ref ref="STDOUT"/>-->
+    <!--</logger>-->
+
+    <!--<logger name="com.test.test.LogbackDemo" level="INFO" additivity="false">-->
+        <!--<appender-ref ref="STDOUT"/>-->
+    <!--</logger>-->
+
+    <!--<root level="ERROR">-->
+        <!--<appender-ref ref="STDOUT" />-->
+    <!--</root>-->
+<!--</configuration>-->

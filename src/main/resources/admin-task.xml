@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+       <!-- 任务执行器 -->
+       <!-- 后续可能需要考虑task持久化 -->
+       <task:executor id="mqExecutor" pool-size="8" keep-alive="5" queue-capacity="32" rejection-policy="CALLER_RUNS"/>
+
+       <!--开启注解调度支持 @Async-->
+       <task:annotation-driven executor="mqExecutor" proxy-target-class="true"/>
+
+</beans>
